@@ -1,5 +1,6 @@
 function warning() {
     alert("\nEPILEPSY WARNING! Page contains rapidly flashing elements.\n\nNobody die because of me, thank you.\n");
+    //alert(document.cookie);
 }
 
 function randomPlayerColor() {

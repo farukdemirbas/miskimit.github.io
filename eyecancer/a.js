@@ -30,6 +30,11 @@ var ultra = false;
 document.addEventListener("keydown", keyDownEvent);
 document.addEventListener("keyup", keyUpEvent);
 
+$(document).ready(function(){
+  warning();
+});
+
+
 function keyDownEvent(event) {
     //set held keys' vars to true
     if (event.keyCode == 32) {
