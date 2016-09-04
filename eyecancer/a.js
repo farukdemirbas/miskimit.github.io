@@ -150,13 +150,13 @@ function draw() {
     collisionDetection(); // ball bouncing, and calls the randomcolor functions
     movePlayer(); // applies dx and dy onto playerX and playerY
     drawPlayer(); // actually draws the player on newly set location
-    logShit(); // logs shit like ddx ddy and rgb values for me to check
+  /*  logShit(); // logs shit like ddx ddy and rgb values for me to check */
 }
 
 setInterval(draw, 10); // calls draw every 10 milliseconds
 
-function logShit() {
+/* function logShit() {
     console.log("dx:", dx, "dy:", dy, "ddx:", ddx, "ddy:", ddy)
     console.log("player color:", playerColor);
     console.log("canvas color:", canvasColor);
-}
+} */
