@@ -25,6 +25,7 @@ var leftHeld = false;
 var upHeld = false;
 var rightHeld = false;
 var downHeld = false;
+var ultra = false;
 
 document.addEventListener("keydown", keyDownEvent);
 document.addEventListener("keyup", keyUpEvent);
@@ -32,8 +33,13 @@ document.addEventListener("keyup", keyUpEvent);
 function keyDownEvent(event) {
 	//set held keys' vars to true
 	if (event.keyCode == 32) {
+		if (!ultra) {
 		ultra = true;
 		document.body.setAttribute("id", "mkULTRA");
+		} else {
+			ultra = false;
+		document.body.removeAttribute("id");
+		}
 	}
 	if (event.keyCode == 37) {
 		leftHeld = true;
