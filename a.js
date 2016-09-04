@@ -19,8 +19,8 @@ var ddx = 0; // force x
 var ddy = 0; // force y
 var xForce = 1; 	// is assigned to ddx
 var yForce = 1; 	// is assigned to ddy.
-					// they're basically the same thing as ddx and ddy
-					// only added for ease of tweaking 
+// they're basically the same thing as ddx and ddy
+// only added for ease of tweaking
 var leftHeld = false;
 var upHeld = false;
 var rightHeld = false;
@@ -30,7 +30,11 @@ document.addEventListener("keydown", keyDownEvent);
 document.addEventListener("keyup", keyUpEvent);
 
 function keyDownEvent(event) {
-//set held keys' vars to true
+	//set held keys' vars to true
+	if (event.keyCode == 32) {
+		ultra = true;
+		document.body.setAttribute("id", "mkULTRA");
+	}
 	if (event.keyCode == 37) {
 		leftHeld = true;
 	}
@@ -43,14 +47,14 @@ function keyDownEvent(event) {
 	if (event.keyCode == 40) {
 		downHeld = true;
 	}
-//spacebar to stop player
+	//spacebar to stop player
 	if (event.keyCode == 32) {
 
 	}
 }
 
 function keyUpEvent(event) {
-//set pressed keys' vars to false
+	//set pressed keys' vars to false
 	if (event.keyCode == 37) {
 		leftHeld = false;
 	}
