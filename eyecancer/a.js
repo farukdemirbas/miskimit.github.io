@@ -31,7 +31,7 @@ document.addEventListener("keydown", keyDownEvent);
 document.addEventListener("keyup", keyUpEvent);
 
 $(document).ready(function(){
-  warning();
+  alert("\nEPILEPSY WARNING! Page contains rapidly flashing elements.\n\nNobody die because of me, thank you.\n");
 });
 
 
