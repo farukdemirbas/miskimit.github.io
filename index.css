@@ -1,0 +1,45 @@
+html {
+	background-image: url("pixelartbg.png");
+}
+.container {
+	display: -webkit-flex;
+	display: flex;
+	-webkit-justify-content: center;
+	justify-content: center;
+	-webkit-align-items: stretch;
+	align-items: stretch;
+	width: 100%;
+	height: 100%;
+}
+.side {
+	width: 200px;
+	margin: 40px;
+}
+
+.main {
+	font-family: "Bree Serif", serif;
+	background-color: rgba(200, 30, 120, 0.4);
+	max-width: 900px;
+	margin: 8% auto 0;
+	text-align: justify;
+	color: white;
+	text-indent: 20px;
+}
+
+.main div {
+	padding: 25px;
+}
+
+.apps a {
+	font-size: 18pt;
+	display: block;
+	color: rgba(255, 180, 150, 0.85);
+	text-decoration: none;
+	margin: 5 60;
+	padding: 4;
+	text-align: right;
+}
+
+.apps a:hover {
+	color: tomato;
+}
