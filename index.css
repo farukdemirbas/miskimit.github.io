@@ -19,7 +19,9 @@ html {
 .main {
 	font-family: 'Bree Serif', serif;
 	background-color: rgba(200, 30, 120, 0.4);
-	max-width: 900px;
+	position: absolute;
+	min-width: 550px;
+	max-width: 550px;
 	margin: 8% auto 0;
 	text-align: justify;
 	color: white;
