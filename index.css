@@ -1,5 +1,6 @@
 html {
 	background-image: url("pixelartbg.png");
+	background-repeat: no-repeat;
 }
 .container {
 	display: -webkit-flex;
