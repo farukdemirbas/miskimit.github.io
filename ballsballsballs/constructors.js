@@ -1,15 +1,22 @@
 function Ball(x, y, radius) {
-    this.x = x;
-    this.y = y;
+    this.radius = radius;
     this.dx = randomDx();
     this.dy = randomDy();
-    this.radius = radius;
+    this.mass = this.radius * this.radius * Math.PI;
+    this.x = x
+    this.y = y
     this.color = randomColor();
     this.draw = function() {
         ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.arc(this.x, this.y, this.radius, 0, 2*Math.PI);
         ctx.fillStyle = this.color;
         ctx.fill();
         ctx.closePath();
+    };
+    this.speed = function() {
+        return Math.sqrt(this.dx * this.dx + this.dy * this.dy);
+    };
+    this.kineticEnergy = function () {
+        return (0.5 * this.mass * this.speed() * this.speed());
     };
 }

@@ -27,7 +27,8 @@ function randomY() {
 }
 
 function randomRadius() {
-    r = Math.floor(Math.random() * 20 + 10);
+    r = Math.ceil(Math.random() * 20 + 10);
+    //r = 20;
     return r;
 }
 
@@ -39,4 +40,9 @@ function randomDx() {
 function randomDy() {
     r = Math.floor(Math.random() * 20 - 10);
     return r;
+}
+
+function distanceNextFrame (a, b) {
+    return Math.floor(Math.sqrt(Math.abs((a.x + a.dx) - (b.x + b.dx))**2 + Math.abs((a.y + a.dy) - (b.y + b.dy))**2) - a.radius - b.radius);
+    //return Math.abs((a.x + a.dx) - (b.x + b.dx)) - 30;
 }
