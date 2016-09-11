@@ -42,7 +42,6 @@ function randomDy() {
     return r;
 }
 
-function distanceNextFrame (a, b) {
-    return Math.floor(Math.sqrt(Math.abs((a.x + a.dx) - (b.x + b.dx))**2 + Math.abs((a.y + a.dy) - (b.y + b.dy))**2) - a.radius - b.radius);
-    //return Math.abs((a.x + a.dx) - (b.x + b.dx)) - 30;
+function distanceNextFrame(a, b) {
+    return Math.sqrt((a.x + a.dx - b.x - b.dx)**2 + (a.y + a.dy - b.y - b.dy)**2) - a.radius - b.radius;
 }

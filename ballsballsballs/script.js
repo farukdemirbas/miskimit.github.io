@@ -75,7 +75,7 @@ function canvasBackground() {
     canvas.style.backgroundColor = "skyblue";
 }
 
-function collisionDetection() {
+function wallCollision() {
     for (var obj in objArray) {
         if (objArray[obj].x - objArray[obj].radius + objArray[obj].dx < 0 ||
             objArray[obj].x + objArray[obj].radius + objArray[obj].dx > canvas.width) {
@@ -89,10 +89,11 @@ function collisionDetection() {
 }
 
 function ballCollision() {
+    //var hasCollided = {};
     for (var obj1 in objArray) {
         for (var obj2 in objArray) {
-            if (obj1 !== obj2 && distanceNextFrame(objArray[obj1], objArray[obj2]) <= 0) {
-                
+            if (obj1 !== obj2 /*&& hasCollided[obj2] != obj1*/ && distanceNextFrame(objArray[obj1], objArray[obj2]) <= 0) {
+
                 dx1F = ((objArray[obj1].mass - objArray[obj2].mass) / (objArray[obj1].mass + objArray[obj2].mass)) * objArray[obj1].dx + ((2 * objArray[obj2].mass / (objArray[obj1].mass + objArray[obj2].mass)) * objArray[obj2].dx);
 
                 dy1F = ((objArray[obj1].mass - objArray[obj2].mass) / (objArray[obj1].mass + objArray[obj2].mass)) * objArray[obj1].dy + ((2 * objArray[obj2].mass / (objArray[obj1].mass + objArray[obj2].mass)) * objArray[obj2].dy);
@@ -102,10 +103,13 @@ function ballCollision() {
                 dy2F = ((2 * objArray[obj1].mass / (objArray[obj1].mass + objArray[obj2].mass)) * objArray[obj1].dy + ((objArray[obj2].mass - objArray[obj1].mass) / (objArray[obj1].mass + objArray[obj2].mass)) * objArray[obj2].dy);
 
 
-                objArray[obj1].dx = dx1F;
-                objArray[obj1].dy = dy1F;
-                objArray[obj2].dx = dx2F;
+                objArray[obj1].dx = dx1F;                
+                objArray[obj1].dy = dy1F;                
+                objArray[obj2].dx = dx2F;                
                 objArray[obj2].dy = dy2F;
+
+                //hasCollided[obj1] = obj2;
+
             }
 
         }
@@ -130,20 +134,22 @@ function drawObjects() {
 function draw() {
     clearCanvas();
     canvasBackground();
-    collisionDetection();
-    ballCollision();
     arrowControls();
     moveObjects();
     drawObjects();
+    ballCollision();
+    wallCollision();
     logShit();
+    requestAnimationFrame(draw);
 }
 
-setInterval(draw, 10);
+//setInterval(draw, 1000/60);
+draw();
 
 function logShit() {
     for (var obj in objArray) {
         totalKineticEnergy += objArray[obj].kineticEnergy();
     }
-    console.log("kinetic energy:", Math.round(totalKineticEnergy));
+    //console.log("kinetic energy:", Math.round(totalKineticEnergy));
     totalKineticEnergy = 0;
 }
