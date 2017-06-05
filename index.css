@@ -33,14 +33,20 @@ html {
 	padding: 25px;
 }
 
+#kanka {
+	color: rgba(255, 200, 170, 0.85);
+	text-align: left;
+	font-style: italic;
+}
+
 .apps a {
 	font-size: 18pt;
 	display: block;
-	color: rgba(255, 180, 150, 0.85);
+	color: white;
 	text-decoration: none;
 	margin: 5 60;
 	padding: 4;
-	text-align: right;
+	text-align: middle;
 }
 
 .apps a:hover {
