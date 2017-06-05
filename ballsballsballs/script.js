@@ -154,6 +154,7 @@ function draw() {
 objArray[objArray.length] = new Ball(randomX(), randomY(), randomRadius());
 objArray[objArray.length] = new Ball(randomX(), randomY(), randomRadius());
 objArray[objArray.length] = new Ball(randomX(), randomY(), randomRadius());
+objArray[objArray.length] = new Ball(randomX(), randomY(), randomRadius());
 
 draw();
 
