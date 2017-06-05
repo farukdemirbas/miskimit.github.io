@@ -11,6 +11,9 @@ var upHeld = false;
 var rightHeld = false;
 var downHeld = false;
 
+var beep = new Audio('beep');
+beep.volume = 0.015
+
 document.addEventListener("keydown", keyDownHandler);
 document.addEventListener("keyup", keyUpHandler);
 
@@ -92,23 +95,28 @@ function ballCollision() {
     //var hasCollided = {};
     for (var obj1 in objArray) {
         for (var obj2 in objArray) {
-            if (obj1 !== obj2 /*&& hasCollided[obj2] != obj1*/ && distanceNextFrame(objArray[obj1], objArray[obj2]) <= 0) {
+            if (obj1 !== obj2 && distanceNextFrame(objArray[obj1], objArray[obj2]) <= 0) {
 
-                dx1F = ((objArray[obj1].mass - objArray[obj2].mass) / (objArray[obj1].mass + objArray[obj2].mass)) * objArray[obj1].dx + ((2 * objArray[obj2].mass / (objArray[obj1].mass + objArray[obj2].mass)) * objArray[obj2].dx);
+                theta1 = objArray[obj1].angle();
+                theta2 = objArray[obj2].angle();
+                phi = Math.atan2(objArray[obj2].y - objArray[obj1].y, objArray[obj2].x - objArray[obj1].x);
+                m1 = objArray[obj1].mass;
+                m2 = objArray[obj2].mass;
+                v1 = objArray[obj1].speed();
+                v2 = objArray[obj2].speed();
 
-                dy1F = ((objArray[obj1].mass - objArray[obj2].mass) / (objArray[obj1].mass + objArray[obj2].mass)) * objArray[obj1].dy + ((2 * objArray[obj2].mass / (objArray[obj1].mass + objArray[obj2].mass)) * objArray[obj2].dy);
-
-                dx2F = ((2 * objArray[obj1].mass / (objArray[obj1].mass + objArray[obj2].mass)) * objArray[obj1].dx + ((objArray[obj2].mass - objArray[obj1].mass) / (objArray[obj1].mass + objArray[obj2].mass)) * objArray[obj2].dx);
-
-                dy2F = ((2 * objArray[obj1].mass / (objArray[obj1].mass + objArray[obj2].mass)) * objArray[obj1].dy + ((objArray[obj2].mass - objArray[obj1].mass) / (objArray[obj1].mass + objArray[obj2].mass)) * objArray[obj2].dy);
-
+                dx1F = (v1 * Math.cos(theta1 - phi) * (m1-m2) + 2*m2*v2*Math.cos(theta2 - phi)) / (m1+m2) * Math.cos(phi) + v1*Math.sin(theta1-phi) * Math.cos(phi+Math.PI/2);
+                dy1F = (v1 * Math.cos(theta1 - phi) * (m1-m2) + 2*m2*v2*Math.cos(theta2 - phi)) / (m1+m2) * Math.sin(phi) + v1*Math.sin(theta1-phi) * Math.sin(phi+Math.PI/2);
+                dx2F = (v2 * Math.cos(theta2 - phi) * (m2-m1) + 2*m1*v1*Math.cos(theta1 - phi)) / (m1+m2) * Math.cos(phi) + v2*Math.sin(theta2-phi) * Math.cos(phi+Math.PI/2);
+                dy2F = (v2 * Math.cos(theta2 - phi) * (m2-m1) + 2*m1*v1*Math.cos(theta1 - phi)) / (m1+m2) * Math.sin(phi) + v2*Math.sin(theta2-phi) * Math.sin(phi+Math.PI/2);
 
                 objArray[obj1].dx = dx1F;                
                 objArray[obj1].dy = dy1F;                
                 objArray[obj2].dx = dx2F;                
                 objArray[obj2].dy = dy2F;
 
-                //hasCollided[obj1] = obj2;
+                
+                beep.play()
 
             }
 
@@ -150,6 +158,6 @@ function logShit() {
     for (var obj in objArray) {
         totalKineticEnergy += objArray[obj].kineticEnergy();
     }
-    //console.log("kinetic energy:", Math.round(totalKineticEnergy));
+    console.log("kinetic energy:", totalKineticEnergy.toLocaleString());
     totalKineticEnergy = 0;
 }

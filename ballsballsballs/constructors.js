@@ -2,7 +2,7 @@ function Ball(x, y, radius) {
     this.radius = radius;
     this.dx = randomDx();
     this.dy = randomDy();
-    this.mass = this.radius * this.radius * Math.PI;
+    this.mass = this.radius * this.radius * this.radius;
     this.x = x
     this.y = y
     this.color = randomColor();
@@ -15,6 +15,9 @@ function Ball(x, y, radius) {
     };
     this.speed = function() {
         return Math.sqrt(this.dx * this.dx + this.dy * this.dy);
+    };
+    this.angle = function() {
+        return Math.atan2(this.dy, this.dx);
     };
     this.kineticEnergy = function () {
         return (0.5 * this.mass * this.speed() * this.speed());

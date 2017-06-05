@@ -27,18 +27,17 @@ function randomY() {
 }
 
 function randomRadius() {
-    r = Math.ceil(Math.random() * 20 + 10);
-    //r = 20;
+    r = Math.ceil(Math.random() * 23 + 5);
     return r;
 }
 
 function randomDx() {
-    r = Math.floor(Math.random() * 20 - 10);
+    r = Math.floor(Math.random() * 12 - 6);
     return r;
 }
 
 function randomDy() {
-    r = Math.floor(Math.random() * 20 - 10);
+    r = Math.floor(Math.random() * 12 - 6);
     return r;
 }
 
