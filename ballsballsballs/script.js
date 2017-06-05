@@ -57,19 +57,19 @@ function keyUpHandler(event) {
 function arrowControls() {
     if (leftHeld) { // left arrow
         for (var obj in objArray) {
-            objArray[obj].dx -= 0.5;
+            objArray[obj].dx -= 0.2;
         }
     } if (upHeld) { // up arrow
         for (var obj in objArray) {
-            objArray[obj].dy -= 0.5;
+            objArray[obj].dy -= 0.2;
         }
     } if (rightHeld) { // right arrow
         for (var obj in objArray) {
-            objArray[obj].dx += 0.5;
+            objArray[obj].dx += 0.2;
         }
     } if (downHeld) { // down arrow
         for (var obj in objArray) {
-            objArray[obj].dy += 0.5;
+            objArray[obj].dy += 0.2;
         }
     }
 }
@@ -114,10 +114,8 @@ function ballCollision() {
                 objArray[obj1].dy = dy1F;                
                 objArray[obj2].dx = dx2F;                
                 objArray[obj2].dy = dy2F;
-
                 
                 beep.play()
-
             }
 
         }
@@ -152,6 +150,11 @@ function draw() {
 }
 
 //setInterval(draw, 1000/60);
+
+objArray[objArray.length] = new Ball(randomX(), randomY(), randomRadius());
+objArray[objArray.length] = new Ball(randomX(), randomY(), randomRadius());
+objArray[objArray.length] = new Ball(randomX(), randomY(), randomRadius());
+
 draw();
 
 function logShit() {

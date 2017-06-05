@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>balls balls balls</title>
+  <title>2D collisions</title>
   <link rel="shortcut icon" href="favicon.ico"/>
   <style>
 
@@ -15,7 +15,7 @@
   #title {
     color: tomato;
     font-size: 250%;
-    font-style: italic;
+    font-style: normal;
     margin: 1px;
     border: 1px;
   }
@@ -30,8 +30,8 @@
 
   section.footer {
     color: tomato;
-    font-family: calibri;
-    font-style: italic;
+    font-family: Ubuntu;
+    font-style: normal;
     font-size: small;
   }
 
@@ -39,7 +39,7 @@
 </head>
 <body>
   <section>
-    <div id="title"><p id="balls">balls balls balls</p></div>
+    <div id="title"><p id="balls">2D collisions</p></div>
   </section>
   <div>
     <canvas id="myCanvas" width="700" height="500"></canvas>
@@ -48,10 +48,11 @@
     <script src="script.js"></script>
   </div>
   <section class="footer">
-    <p><strong><font color=red>'C'</strong> to spawn sheep</font><br>
-      <strong>Arrow keys</strong> to move the herd <br>
-      <strong>'P'</strong> to pause || <strong>'R'</strong> to RESET </p>
-    <p>a team tomato production</p>
+    <p><strong><font color=red>'C'</strong> to spawn more</font><br>
+      <strong>Arrow keys</strong> to move them <br>
+      <strong>'P'</strong> to pause/unpause <br>
+      <strong>'R'</strong> to RESET (without a reload)</p>
+    <p><font color=purple style=italic>tomato</font></p>
   </section>
 </body>
 </html>

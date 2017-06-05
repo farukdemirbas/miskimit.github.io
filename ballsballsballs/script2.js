@@ -27,7 +27,7 @@ function randomY() {
 }
 
 function randomRadius() {
-    r = Math.ceil(Math.random() * 23 + 5);
+    r = Math.ceil(Math.random() * 20 + 10);
     return r;
 }
 
