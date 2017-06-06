@@ -2,19 +2,19 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>2D collision</title>
+  <title>2D collision physics</title>
   <link rel="shortcut icon" href="favicon.ico"/>
   <style>
 
   body {
-    background-color: #FEF6E4;
+    background-color: khaki;
     text-align: center;
-    font-family: Ubuntu;
+    font-family: Ubuntu Mono;
   }
 
   #title {
-    color: tomato;
-    font-size: 250%;
+    color: black;
+    font-size: 200%;
     font-style: normal;
     margin: 1px;
     border: 1px;
@@ -29,29 +29,35 @@
   }
 
   section.footer {
-    color: tomato;
-    font-family: Ubuntu;
+    color: black;
+    font-family: Ubuntu Mono;
     font-style: normal;
     font-size: small;
+  }
+  #disclaimer {
+  	font-size: 74%;
+  	color: gray;
   }
 
   </style>
 </head>
 <body>
   <section>
-    <div id="title"><p id="balls">2D collision</p></div>
+    <div id="title"><p id="balls">2D collision physics</p></div>
   </section>
   <div>
-    <canvas id="myCanvas" width="640" height="480"></canvas>
+    <canvas id="myCanvas" width="640" height="480" style="border:1px solid black;"></canvas>
     <script src="constructors.js"></script>
     <script src="script2.js"></script>
     <script src="script.js"></script>
   </div>
   <section class="footer">
     <p><strong>'C'</strong> to spawn more<br>
-      <strong>arrow keys</strong> to move them <br>
-      <strong>'P'</strong> to pause/unpause <br>
-      <strong>'R'</strong> to RESET (without a reload)</p>
+      <strong>'G'</strong>: toggle gravity + drag (sloppy) <br>
+      <strong>arrow keys</strong> to accelerate all <br>      
+      <strong>'M'</strong> to mute the geiger sound ._. <br>
+      <strong>'P'</strong>: pause/unpause || <strong>'R'</strong>: RESET</p>
+    <span id="disclaimer"><p>disclaimer:<br>a simple off-thing lacking <br>normal force and angular momentum. <br> lack of normal force causes overlaps <br>and spassing out if you spawn too <br> many balls and turn on gravity. <br>has some more bugs when you play around <br>but still works to some extent. <br>i might try and improve the physics <br>when i get the time.</p></span>
     <p><a href="https://github.com/miskimit/miskimit.github.io">source code on github</a></p>
   </section>
 </body>

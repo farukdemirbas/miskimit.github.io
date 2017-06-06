@@ -27,7 +27,10 @@ function Ball(x, y, radius) {
         return Math.atan2(this.dy, this.dx);
     };
     this.kineticEnergy = function () {
-    // only for masturbation purposes,not rly used for computation.
+    // only for masturbation purposes, not rly used for computation.
         return (0.5 * this.mass * this.speed() * this.speed());
     };
+    this.onGround = function() {
+        return (this.y + this.radius >= canvas.height)
+    }
 }

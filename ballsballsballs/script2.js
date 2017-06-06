@@ -27,7 +27,7 @@ function randomY() {
 }
 
 function randomRadius() {
-    r = Math.ceil(Math.random() * 20 + 10);
+    r = Math.ceil(Math.random() * 15 + 15);
     return r;
 }
 
@@ -43,4 +43,8 @@ function randomDy() {
 
 function distanceNextFrame(a, b) {
     return Math.sqrt((a.x + a.dx - b.x - b.dx)**2 + (a.y + a.dy - b.y - b.dy)**2) - a.radius - b.radius;
+}
+
+function distance(a, b) {
+    return Math.sqrt((a.x - b.x)**2 + (a.y - b.y)**2);
 }
