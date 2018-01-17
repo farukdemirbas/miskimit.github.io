@@ -194,7 +194,7 @@ function draw() {
     drawObjects();
     ballCollision();
     wallCollision();
-    logShit();
+    //logShit();
     requestAnimationFrame(draw);
 }
 
