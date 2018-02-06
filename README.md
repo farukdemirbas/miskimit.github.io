@@ -1,2 +1,1 @@
-# eye-cancer
-An incredibru canvas app to spread awareness on eye cancer.
+Random stuff I've concocted.
