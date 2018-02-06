@@ -1,5 +1,5 @@
 html {
-	background-image: url("pixelartbg.png");
+	background-image: url("background.png");
 	background-repeat: no-repeat;
 }
 .container {
@@ -19,7 +19,7 @@ html {
 
 .main {
 	font-family: 'Bree Serif', serif;
-	background-color: rgba(200, 30, 120, 0.3);
+	background-color: rgba(100, 150, 120, 0.2);
 	position: absolute;
 	min-width: 549px;
 	max-width: 550px;
@@ -33,12 +33,6 @@ html {
 	padding: 25px;
 }
 
-#kanka {
-	color: rgba(255, 200, 170, 0.84);
-	text-align: left;
-	font-style: italic;
-}
-
 .apps a {
 	font-size: 18pt;
 	display: block;
@@ -50,5 +44,5 @@ html {
 }
 
 .apps a:hover {
-	color: tomato;
+	color: yellow;
 }

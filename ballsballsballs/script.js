@@ -18,6 +18,10 @@ var gravityOn = false;
 var dragOn = false;
 var soundOn = true;
 
+var clearCanv = true;
+
+var bigBalls = false;
+
 document.addEventListener("keydown", keyDownHandler);
 document.addEventListener("keyup", keyUpHandler);
 
@@ -47,6 +51,10 @@ function keyDownHandler(event) {
     } else if (event.keyCode == 82) { // r
         objArray = [];
         console.log("sheep:", objArray.length);
+    } else if (event.keyCode == 75) { // k
+        clearCanv = !clearCanv;
+    } else if (event.keyCode == 88) { // x
+        bigBalls = !bigBalls;
     }
 }
 
@@ -116,7 +124,10 @@ function ballCollision() {
     for (var obj1 in objArray) {
         for (var obj2 in objArray) {
             if (obj1 !== obj2 && distanceNextFrame(objArray[obj1], objArray[obj2]) <= 0) {
+                ///////////////////////////////
+                // FIX THIS SAFETY THING BECAUSE IT IS HELL
                 ballCollisionSafety();
+                //////////////////////////////
                 var theta1 = objArray[obj1].angle();
                 var theta2 = objArray[obj2].angle();
                 var phi = Math.atan2(objArray[obj2].y - objArray[obj1].y, objArray[obj2].x - objArray[obj1].x);
@@ -183,7 +194,7 @@ function drawObjects() {
 }
 
 function draw() {
-    clearCanvas();
+    if(clearCanv) clearCanvas();
     canvasBackground();
     if (!paused) {
         arrowControls();
@@ -198,12 +209,22 @@ function draw() {
     requestAnimationFrame(draw);
 }
 
-//setInterval(draw, 1000/60);
+// spawn the initial thingies.
+for (i = 0; i<200; i++) {
+    objArray[objArray.length] = new Ball(randomX(), randomY(), randomRadius());
+}
+bigBalls = true;
+// manually spawn the few large ones that
+// start with no velocity. because i'm lazy.
+for (i = 0; i<4; i++) {
+    var temp = new Ball(randomX(), randomY(), 35);
+    temp.dx = 0;
+    temp.dy = 0;
+    objArray[objArray.length] = temp;
+}
 
-objArray[objArray.length] = new Ball(randomX(), randomY(), randomRadius());
-objArray[objArray.length] = new Ball(randomX(), randomY(), randomRadius());
-objArray[objArray.length] = new Ball(randomX(), randomY(), randomRadius());
-objArray[objArray.length] = new Ball(randomX(), randomY(), randomRadius());
+// and manually spawn one large ball WITH initial velocity.
+objArray[objArray.length] = new Ball(randomX(), randomY(), 20);
 
 draw();
 

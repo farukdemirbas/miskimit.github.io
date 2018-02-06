@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>2D collision physics</title>
+  <title>2d collision</title>
   <link rel="shortcut icon" href="favicon.ico"/>
   <style>
 
@@ -41,24 +41,39 @@
 
   </style>
 </head>
-<body>
+<body style="text-align: center">
   <section>
-    <div id="title"><p id="balls">2D collision physics</p></div>
+    <div id="title"><p id="balls" style="font-size: 15pt">2d collision of spherical hard bodies </p><br/></div>
   </section>
   <div>
-    <canvas id="myCanvas" width="640" height="480" style="border:1px solid black;"></canvas>
+    <canvas id="myCanvas" width="800" height="600" style="border:1px solid black;"></canvas>
     <script src="constructors.js"></script>
     <script src="script2.js"></script>
     <script src="script.js"></script>
   </div>
   <section class="footer">
-    <p><strong>'C'</strong> to spawn more<br>
-      <strong>'G'</strong>: toggle gravity + drag (sloppy) <br>
-      <strong>arrow keys</strong> to accelerate all <br>      
+
+    <p>
+      <strong>Arrow Keys</strong> to accelerate all <br>      
+      <strong>'G'</strong>: toggle gravity + drag <br>
+      <strong>'C'</strong> to spawn more balls<br>
+      <strong>'X'</strong> to toggle SIZE of future balls <br>
+      <strong>'K'</strong> to toggle clearCanvas(); <br>
       <strong>'M'</strong> to mute the geiger sound ._. <br>
-      <strong>'P'</strong>: pause/unpause || <strong>'R'</strong>: RESET</p>
-    <span id="disclaimer"><p>disclaimer:<br>a simple off-thing lacking <br>normal force and angular momentum. <br> lack of normal force causes overlaps <br>and spassing out if you spawn too <br> many balls and turn on gravity. <br>has some more bugs when you play around <br>but still works to some extent. <br>i might try and improve the physics <br>when i get the time.</p></span>
-    <p><a href="https://github.com/miskimit/miskimit.github.io">source code on github</a></p>
+      <strong>'P'</strong>: pause/unpause || <strong>'R'</strong>: RESET
+    </p>
+
+    <div id="disclaimer" align="center" style="word-break: break-word; width: 200px; display:inline-block;">
+      <p>
+        disclaimer:<br>
+        a simple off-thing completely lacking rotational computations. in other words, the spheres do not gain angular momentum from collisions. in other-other-words, rotation does not exist in this applet-thing. i will one day come back and implement rotation to this, but i hate working with pure js + canvas and i've since shifted 100% to C++. there's also a massive performance problem mainly because i did bad job of optimizing my code i think, and a canvas app has its limitations. i'll make a more complete version of hard body physics with webgl and C++ later down the line, and that thing will include non-spherical, angular computations, and even soft bodies, hopefully. i may also become the queen of england.
+      </p>
+    </div>
+
+    <p>
+      <a href="https://github.com/miskimit/miskimit.github.io">source code on github</a>
+    </p>
+
   </section>
 </body>
 </html>

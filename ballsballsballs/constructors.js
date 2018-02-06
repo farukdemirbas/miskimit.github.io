@@ -3,7 +3,11 @@ function Ball(x, y, radius) {
     this.dx = randomDx();
     this.dy = randomDy();
     // mass is that of a sphere, except the constants like PI and 4/3
-    // reason for sphere over circle is, well, we're looking at spheres from above, duh
+    // reason for sphere over circle is, well, as humans we live in 3d
+    // so sphere collision matches our brain's expectation of what's
+    // going to happen, thus appearing more natural and realistic.
+    // it DOES make a difference when a larger sphere collides
+    // with a smaller one.
     this.mass = this.radius * this.radius * this.radius;
     this.x = x;
     this.y = y;
@@ -23,7 +27,7 @@ function Ball(x, y, radius) {
         return Math.sqrt(this.dx * this.dx + this.dy * this.dy);
     };
     this.angle = function() {
-        //angle of ball with the xy plane
+        //angle of ball with the x axis
         return Math.atan2(this.dy, this.dx);
     };
     this.kineticEnergy = function () {

@@ -27,17 +27,22 @@ function randomY() {
 }
 
 function randomRadius() {
-    r = Math.ceil(Math.random() * 15 + 15);
-    return r;
+    if (bigBalls) {
+        r = Math.ceil(Math.random() * 10 + 22);
+        return r;
+    } else {
+        r = Math.ceil(Math.random() * 2 + 3);
+        return r;
+    }
 }
 
 function randomDx() {
-    r = Math.floor(Math.random() * 12 - 6);
+    r = Math.floor(Math.random() * 16 - 8);
     return r;
 }
 
 function randomDy() {
-    r = Math.floor(Math.random() * 12 - 6);
+    r = Math.floor(Math.random() * 16 - 8);
     return r;
 }
 
