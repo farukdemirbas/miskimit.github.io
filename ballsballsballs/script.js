@@ -12,10 +12,10 @@ var rightHeld = false;
 var downHeld = false;
 
 var beep = new Audio('beep');
-beep.volume = 0.015
+beep.volume = 0.002
 
-var gravityOn = false;
-var dragOn = false;
+var gravityOn = true;
+var dragOn = true;
 var soundOn = true;
 
 var clearCanv = true;
@@ -40,13 +40,13 @@ function keyDownHandler(event) {
         dragOn = !dragOn;
     } else if (event.keyCode == 77) { // m
         soundOn = !soundOn;
-    } else if (event.keyCode == 37) { // left arrow
+    } else if (event.keyCode == 65) { // A
         leftHeld = true;
-    } else if (event.keyCode == 38) { // up arrow
+    } else if (event.keyCode == 87) { // W
         upHeld = true;
-    } else if (event.keyCode == 39) { // right arrow
+    } else if (event.keyCode == 68) { // D
         rightHeld = true;
-    } else if (event.keyCode == 40) { // down arrow
+    } else if (event.keyCode == 83) { // S
         downHeld = true;
     } else if (event.keyCode == 82) { // r
         objArray = [];
@@ -60,13 +60,13 @@ function keyDownHandler(event) {
 
 
 function keyUpHandler(event) {
-    if (event.keyCode == 37) { // left arrow
+    if (event.keyCode == 65) { // A
         leftHeld = false;
-    } else if (event.keyCode == 38) { // up arrow
+    } else if (event.keyCode == 87) { // W
         upHeld = false;
-    } else if (event.keyCode == 39) { // right arrow
+    } else if (event.keyCode == 68) { // D
         rightHeld = false;
-    } else if (event.keyCode == 40) { // down arrow
+    } else if (event.keyCode == 83) { // S
         downHeld = false;
     }
 }
@@ -95,39 +95,36 @@ function canvasBackground() {
     canvas.style.backgroundColor = "rgb(215, 235, 240)";
 }
 
-function wallCollision() {
-    for (var obj in objArray) {
-        if (objArray[obj].x - objArray[obj].radius + objArray[obj].dx < 0 ||
-            objArray[obj].x + objArray[obj].radius + objArray[obj].dx > canvas.width) {
-            objArray[obj].dx *= -1;
-        }
-        if (objArray[obj].y - objArray[obj].radius + objArray[obj].dy < 0 ||
-            objArray[obj].y + objArray[obj].radius + objArray[obj].dy > canvas.height) {
-            objArray[obj].dy *= -1;
-        }
-        if (objArray[obj].y + objArray[obj].radius > canvas.height) {
-            objArray[obj].y = canvas.height - objArray[obj].radius;
-        }
-        if (objArray[obj].y - objArray[obj].radius < 0) {
-            objArray[obj].y = objArray[obj].radius;
-        }
-        if (objArray[obj].x + objArray[obj].radius > canvas.width) {
-            objArray[obj].x = canvas.width - objArray[obj].radius;
-        }
-        if (objArray[obj].x - objArray[obj].radius < 0) {
-            objArray[obj].x = objArray[obj].radius;
-        }
+function wallCollision(ball) {
+
+    if (!ball) return; // out of bounds otherwise. why, fuck knows. too lazy to fix this horrible codebase any further x_x
+
+    if (ball.x - ball.radius + ball.dx < 0 ||
+        ball.x + ball.radius + ball.dx > canvas.width) {
+        ball.dx *= -1;
     }
+    if (ball.y - ball.radius + ball.dy < 0 ||
+        ball.y + ball.radius + ball.dy > canvas.height) {
+        ball.dy *= -1;
+    }
+    if (ball.y + ball.radius > canvas.height) {
+        ball.y = canvas.height - ball.radius;
+    }
+    if (ball.y - ball.radius < 0) {
+        ball.y = ball.radius;
+    }
+    if (ball.x + ball.radius > canvas.width) {
+        ball.x = canvas.width - ball.radius;
+    }
+    if (ball.x - ball.radius < 0) {
+        ball.x = ball.radius;
+    }    
 }
 
 function ballCollision() {
     for (var obj1 in objArray) {
         for (var obj2 in objArray) {
             if (obj1 !== obj2 && distanceNextFrame(objArray[obj1], objArray[obj2]) <= 0) {
-                ///////////////////////////////
-                // FIX THIS SAFETY THING BECAUSE IT IS HELL
-                ballCollisionSafety();
-                //////////////////////////////
                 var theta1 = objArray[obj1].angle();
                 var theta2 = objArray[obj2].angle();
                 var phi = Math.atan2(objArray[obj2].y - objArray[obj1].y, objArray[obj2].x - objArray[obj1].x);
@@ -148,20 +145,22 @@ function ballCollision() {
                 
                 if (soundOn)
                     beep.play();
-            }
-
+            }            
         }
+        wallCollision(objArray[obj1]);
     }
 }
-function ballCollisionSafety() { //because i suck at coding proper collision
+function staticCollision() {
     for (var obj1 in objArray) {
         for (var obj2 in objArray) {
             if (obj1 !== obj2 &&
-                distance(objArray[obj1], objArray[obj2]) < objArray[obj1].radius + objArray[obj2].radius) {
+                distance(objArray[obj1], objArray[obj2]) < objArray[obj1].radius + objArray[obj2].radius)
+            {
                 var theta = Math.atan2((objArray[obj1].y - objArray[obj2].y), (objArray[obj1].x - objArray[obj2].x));
                 var overlap = objArray[obj1].radius + objArray[obj2].radius - distance (objArray[obj1], objArray[obj2]);
-                objArray[obj1].x += overlap * Math.cos(theta);
-                objArray[obj1].y += overlap * Math.sin(theta);
+                var smallerObject = objArray[obj1].radius < objArray[obj2].radius ? obj1 : obj2
+                objArray[smallerObject].x -= overlap * Math.cos(theta);
+                objArray[smallerObject].y -= overlap * Math.sin(theta);
             }
         }
     }
@@ -203,6 +202,7 @@ function draw() {
             applyDrag(); }
         moveObjects();}
     drawObjects();
+    staticCollision();
     ballCollision();
     wallCollision();
     //logShit();
@@ -210,14 +210,14 @@ function draw() {
 }
 
 // spawn the initial thingies.
-for (i = 0; i<40; i++) {
+for (i = 0; i<200; i++) {
     objArray[objArray.length] = new Ball(randomX(), randomY(), randomRadius());
 }
 bigBalls = true;
 // manually spawn the few large ones that
 // start with no velocity. because i'm lazy.
 for (i = 0; i<4; i++) {
-    var temp = new Ball(randomX(), randomY(), 35);
+    var temp = new Ball(randomX(), randomY(), randomRadius());
     temp.dx = 0;
     temp.dy = 0;
     objArray[objArray.length] = temp;

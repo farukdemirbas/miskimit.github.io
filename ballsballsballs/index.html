@@ -43,10 +43,10 @@
 </head>
 <body style="text-align: center">
   <section>
-    <div id="title"><p id="balls" style="font-size: 15pt">2d collision of spherical hard bodies </p><br/></div>
+    <div id="title"><p id="balls" style="font-size: 15pt">2d collision of 'spherical' hard bodies </p><br/></div>
   </section>
   <div>
-    <canvas id="myCanvas" width="700" height="300" style="border:1px solid black;"></canvas>
+    <canvas id="myCanvas" width="1000" height="400" style="border:1px solid black;"></canvas>
     <script src="constructors.js"></script>
     <script src="script2.js"></script>
     <script src="script.js"></script>
@@ -54,25 +54,34 @@
   <section class="footer">
 
     <p>
-      <strong>Arrow Keys</strong> to accelerate all <br>      
+      <strong>W-A-S-D</strong> to accelerate all <br>      
       <strong>'G'</strong>: toggle gravity + drag <br>
       <strong>'C'</strong> to spawn more balls<br>
       <strong>'X'</strong> to toggle SIZE of future balls <br>
       <strong>'K'</strong> to toggle clearCanvas(); <br>
       <strong>'M'</strong> to mute the geiger sound ._. <br>
-      <strong>'P'</strong>: pause/unpause || <strong>'R'</strong>: RESET
+      <strong>'P'</strong>: pause/unpause || <strong>'R'</strong>: [RESET]
     </p>
-
-    <div id="disclaimer" align="center" style="word-break: break-word; width: 350px; display:inline-block;">
-      <p>
-        disclaimer:<br>
-        a simple off-thing completely lacking rotational computations. in other words, the spheres do not gain angular momentum from collisions. in other-other-words, rotation does not exist in this applet-thing. i will one day come back and implement rotation to this, but i hate working with pure js + canvas and i've since shifted 100% to C++. there's also a massive performance problem mainly because i did bad job of optimizing my code i think, and a canvas app has its limitations. i'll make a more complete version of hard body physics with webgl and C++ later down the line, and that thing will include non-spherical, angular computations, and even soft bodies, hopefully. i may also become the queen of england.
-      </p>
-    </div>
 
     <p>
       <a href="https://github.com/miskimit/miskimit.github.io">source code on github</a>
     </p>
+
+    <div id="disclaimer" align="center" style="word-break: break-word; width: 350px; display:inline-block;">
+
+      <p>
+        You can turn off gravity (G), turn off clearCanvas (G), and observe brownian motion on the larger balls. Keep in mind that gravity increases the number of collisions thus drastically decreasing performance, because at the time I wrote this app I was still a learner and honestly, the code is worse than pubic hair.
+      </p>
+
+      <p>
+        You can also just Reset (R), toggle size of balls (X), spawn a bunch of tiny balls by holding down (C), make sure that the collision sound is on (M), and get mildly surprised by how seldom the collisions actually occur for a screen full of tiny balls. I don't know,  *I* thought it was interesting enough. Hey, don't judge.
+      </p>
+
+      <p>
+        Anyway: this thing is completely lacking rotational computations. In other words, the 'spheres' do not gain angular momentum from collisions. In other-other-words, rotation does not exist in this js-app-thing. I will one day come back and implement rotation to this, but i hate working with pure js + canvas and i've since shifted 100% to C++. Besides, the code is horribly written and very unnapealing. i'll make a more complete version of hard body physics in C++ later down the line, (not sure if I'll try to port it to browsers), and that thing will include non-spherical angular computations, and even soft bodies hopefully. I also aspire to become the queen of England. Or king of the Americas, I don't mind. <br>You really need to stop reading tiny gray paragraphs all the way to the end - life is way too short for that. <br>On a second thought though, at least you don't *write* them...<br>Anyway seriously. Let's... do other things now. Bye.
+      </p>
+
+    </div>
 
   </section>
 </body>

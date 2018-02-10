@@ -28,10 +28,11 @@ function randomY() {
 
 function randomRadius() {
     if (bigBalls) {
-        r = Math.ceil(Math.random() * 10 + 22);
+        r = Math.ceil(Math.random() * 10 + 13);
         return r;
     } else {
-        r = Math.ceil(Math.random() * 2 + 3);
+        //r = Math.ceil(Math.random() * 2 + 1);
+        r = 2;
         return r;
     }
 }
