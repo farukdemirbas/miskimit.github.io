@@ -14,7 +14,7 @@ var downHeld = false;
 var beep = new Audio('beep');
 beep.volume = 0.002
 
-var gravityOn = true;
+var gravityOn = false;
 var dragOn = true;
 var soundOn = true;
 
@@ -32,7 +32,6 @@ function clearCanvas() {
 function keyDownHandler(event) {
     if (event.keyCode == 67) { // c
         objArray[objArray.length] = new Ball(randomX(), randomY(), randomRadius());
-        console.log("sheep:", objArray.length);
     } else if (event.keyCode == 80) { // p
         paused = !paused;
     } else if (event.keyCode == 71) { // g
@@ -50,14 +49,12 @@ function keyDownHandler(event) {
         downHeld = true;
     } else if (event.keyCode == 82) { // r
         objArray = [];
-        console.log("sheep:", objArray.length);
     } else if (event.keyCode == 75) { // k
         clearCanv = !clearCanv;
     } else if (event.keyCode == 88) { // x
         bigBalls = !bigBalls;
     }
 }
-
 
 function keyUpHandler(event) {
     if (event.keyCode == 65) { // A
@@ -96,9 +93,6 @@ function canvasBackground() {
 }
 
 function wallCollision(ball) {
-
-    if (!ball) return; // out of bounds otherwise. why, fuck knows. too lazy to fix this horrible codebase any further x_x
-
     if (ball.x - ball.radius + ball.dx < 0 ||
         ball.x + ball.radius + ball.dx > canvas.width) {
         ball.dx *= -1;
@@ -150,6 +144,7 @@ function ballCollision() {
         wallCollision(objArray[obj1]);
     }
 }
+
 function staticCollision() {
     for (var obj1 in objArray) {
         for (var obj2 in objArray) {
@@ -165,6 +160,7 @@ function staticCollision() {
         }
     }
 }
+
 function applyGravity() {
     for (var obj in objArray) {
         if (objArray[obj].onGround() == false) {
@@ -172,18 +168,19 @@ function applyGravity() {
         }   
     }
 }
+
 function applyDrag() {
     for (var obj in objArray) {
         objArray[obj].dx *= 0.99
         objArray[obj].dy *= 0.99
     }
 }
+
 function moveObjects() {
     for (var obj in objArray) {
         objArray[obj].x += objArray[obj].dx;
         objArray[obj].y += objArray[obj].dy;
-    }
-    
+    }    
 }
 
 function drawObjects() {
@@ -193,30 +190,40 @@ function drawObjects() {
 }
 
 function draw() {
+
     if(clearCanv) clearCanvas();
     canvasBackground();
+
     if (!paused) {
         arrowControls();
         if (gravityOn) {
             applyGravity();
-            applyDrag(); }
-        moveObjects();}
+            applyDrag();
+        }
+        moveObjects();
+    }
+
     drawObjects();
     staticCollision();
     ballCollision();
-    wallCollision();
-    //logShit();
+    //logger();
     requestAnimationFrame(draw);
 }
 
-// spawn the initial thingies.
-for (i = 0; i<200; i++) {
+function logger() {
+    //log some stuff
+}
+
+// spawn the initial small thingies.
+for (i = 0; i<160; i++) {
     objArray[objArray.length] = new Ball(randomX(), randomY(), randomRadius());
 }
+
 bigBalls = true;
+
 // manually spawn the few large ones that
 // start with no velocity. because i'm lazy.
-for (i = 0; i<4; i++) {
+for (i = 0; i<7; i++) {
     var temp = new Ball(randomX(), randomY(), randomRadius());
     temp.dx = 0;
     temp.dy = 0;
@@ -224,14 +231,7 @@ for (i = 0; i<4; i++) {
 }
 
 // and manually spawn one large ball WITH initial velocity.
-objArray[objArray.length] = new Ball(randomX(), randomY(), 20);
+// just to impart some more initial energy in the system.
+objArray[objArray.length] = new Ball(randomX(), randomY(), 15);
 
 draw();
-
-function logShit() {
-    for (var obj in objArray) {
-        totalKineticEnergy += objArray[obj].kineticEnergy();
-    }
-    console.log("kinetic energy:", totalKineticEnergy.toLocaleString());
-    totalKineticEnergy = 0;
-}

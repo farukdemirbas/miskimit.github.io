@@ -2,12 +2,8 @@ function Ball(x, y, radius) {
     this.radius = radius;
     this.dx = randomDx();
     this.dy = randomDy();
-    // mass is that of a sphere, except the constants like PI and 4/3
-    // reason for sphere over circle is, well, as humans we live in 3d
-    // so sphere collision matches our brain's expectation of what's
-    // going to happen, thus appearing more natural and realistic.
-    // it DOES make a difference when a larger sphere collides
-    // with a smaller one.
+    // mass is that of a sphere as opposed to circle.
+    // it *does* make a difference.
     this.mass = this.radius * this.radius * this.radius;
     this.x = x;
     this.y = y;
@@ -17,8 +13,7 @@ function Ball(x, y, radius) {
         ctx.arc(Math.round(this.x), Math.round(this.y), this.radius, 0, 2*Math.PI);
         ctx.fillStyle = this.color;
         ctx.fill();
-        ctx.lineWidth = 1;
-        ctx.strokeStyle = '#003300';
+        ctx.strokeStyle = 'rgba(0, 0, 0, 0.6)';
         ctx.stroke();
         ctx.closePath();
     };

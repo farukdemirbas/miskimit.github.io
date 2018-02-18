@@ -31,19 +31,19 @@ function randomRadius() {
         r = Math.ceil(Math.random() * 10 + 13);
         return r;
     } else {
-        //r = Math.ceil(Math.random() * 2 + 1);
-        r = 2;
+        r = Math.ceil(Math.random() * 2 + 1);
+        //r = 2;
         return r;
     }
 }
 
 function randomDx() {
-    r = Math.floor(Math.random() * 16 - 8);
+    r = Math.floor(Math.random() * 10 - 5);
     return r;
 }
 
 function randomDy() {
-    r = Math.floor(Math.random() * 16 - 8);
+    r = Math.floor(Math.random() * 10 - 5);
     return r;
 }
 
