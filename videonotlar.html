@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>videonotlar</title>
+  <link rel="shortcut icon" href="favicon.ico"/>
+  <style>
+  body {
+    background-color: khaki;
+    font-family: Ubuntu Mono;
+  }
+  #title {
+    color: black;
+    font-size: 200%;
+    font-style: normal;
+    margin: 1px;
+    border: 1px;
+  }
+  #balls {
+    margin-top: 5px;
+  }
+  #myCanvas {
+    margin-top: -20px;
+  }
+  section.footer {
+    color: black;
+    font-family: Ubuntu Mono;
+    font-style: normal;
+    font-size: small;
+  }
+  #disclaimer {
+  	font-size: 74%;
+  	color: gray;
+  }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+<div class="side"></div>
+
+<div class="main">
+
+<pre>
+----------------------------------------
+
+*** Bu notlar linkteki videoya eşlik etmektedir ***
+*** Veya linkteki video bu notlara eşlik etmektedir ***
+*** Belki de ortak bir öğe, hem notlara hem de linkteki videoya eşlik etmektedir ***
+
+*** https://youtu.be/XsHuCs12Er4 ***
+
+----------------------------------------
+
+kurulum
+
+https://drive.google.com/open?id=114pW4WDUNORA6rBS5sray_uvTnoGd8s_
+
+- anaconda kurulumu https://www.anaconda.com/distribution/
+- githubdan clonelama ve "models-master" -> "models". https://github.com/tensorflow/models
+
+GPU kurulumunu kendim deneme şansım yok maalesef, ama:
+- CUDA, cuDNN kurulumu: http://ibrahimdelibasoglu.blogspot.com/2018/06/gpu-destekli-tensorflow-kurulumu-nvidia.html
+
+(tensorflow 2 falan çıktı, biz ilişmiyoruz ona)
+(biz tensorflow==1.12.0'dayız)
+
+anaconda prompt'ta:
+- conda create -n uav pip python=3.5
+- conda activate uav
+- python -m pip install --upgrade pip
+- pip install tensorflow==1.12.0  ((gpu'da kuruyorsak tensorflow-gpu==1.12.0))
+- pip install pillow
+- pip install lxml
+- pip install Cython
+- pip install contextlib2
+- pip install jupyter
+- pip install matplotlib
+- pip install pandas
+- pip install opencv-contrib-python
+
+-------------
+* PROTOBUF
+şunu indirip C:\Program Files'a koy:
+https://github.com/protocolbuffers/protobuf/releases/download/v3.11.0/protoc-3.11.0-win32.zip
+* içinden çıkan C:\Program Files\Google Protobuf\bin'i de Path'e ekle.
+
+- anaconda prompt'u kapatıp aç.
+- conda activate uav
+
+models\research'ün içinden:
+protoc object_detection/protos/*.proto --python_out=.
+
+*** hata verirse:
+for /f %i in ('dir /b object_detection\protos\*.proto') do protoc object_detection\protos\%i --python_out=.
+
+-------------
+
+çevresel değişkenlere PYTHONPATH diye bir değişken açıp içine şunlar:
+D:\uav\models\research;D:\uav\models\research\slim;D:\uav\models\research\object_detection
+
+------------
+
+kurulumu test edelim.
+
+# terminalde python'dan:
+import tensorflow as tf
+tf.Session().run(tf.constant("hello TensorFlow!"))
+# quit()
+
+ve
+
+python models/research/object_detection/builders/model_builder_test.py
+
+ve
+
+python test_opencv.py
+
+ve
+
+python test_model.py
+
+---------------------------------------------------------------------------------------
+
+- model zoo'dan bi hazır model indir, object_detection'ın içine koy. https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md
+
+klasör yapısı
+
+----
+
+* fotoğrafları edin.
+1280x720'den büyük olmasınlar çünkü hem uzun sürüyor hem ram'e sığması.
+fazla büyüklerse resize scripti var.
+en az 150-200 civarı olmalı.
+* çoğu images\train'e, kalanı images\test'e.
+
+----
+
+- labellamak
+- eğer koyduğum çalışmazsa: http://tzutalin.github.io/labelImg/
+
+----
+
+xml_to_csv.py
+
+generate_tfrecord'daki label haritasını düzenle
+
+# Create train data:
+# python generate_tfrecord.py --csv_input=data\train_labels.csv --output_path=data\train.record --image_dir=D:\uav\images\train
+
+# Create test data:
+# python generate_tfrecord.py --csv_input=data\test_labels.csv --output_path=data\test.record --image_dir=D:\uav\images\test
+
+----
+
+training'in içindeki "labelmap.pbtxt"yi doldur.
+item {
+  id: 1
+  name: 'binali'
+}
+Buradaki ID ile az önce generate_tfrecord'da baktığımız ID aynı olmalı.
+
+----
+
+
+
+configler, yani model ayarları.
+her bir varolan model için kendi config'leri şurada:
+models\research\object_detection\samples\configs
+buradan bizimkini kopyala, training'in içine koy.
+
+bunu editliyoruz.
+(bu dosyada path'ler forward slash olmalı ////
+ve çift tırnak içinde olmalı "" yoksa tensorflow hata veriyor
+"D:/örnek/path")
+
+bu dosya her model için hafif farklı oluyor, çünkü hepsinin kendi ayarları var, ama bizi ilgilendiren şeyler hep mevcut.
+
+* en başlarda "num_classes" olur. bunu 1 yapıyoruz çünkü tek class var bizde.
+
+* 100. satır civarında "fine_tune_checkpoint" var.
+yani, kendisinden bayrağı teslim alarak transfer learning yapacağımız hazır modelin nerede olduğunu soruyor. daha önce indirdiğimiz.
+"D:/uav/models/research/object_detection/faster_rcnn_inception_v2_coco_2018_01_28/model.ckpt"
+
+* birkaç satır altında "train_input_reader" bölümü var. burada 2 şey:
+	- input_path : "D:/uav/data/train.record"
+	- label_map_path: "D:/uav/training/labelmap.pbtxt"
+
+* 2-3 satır altında "eval_config"in içinde:
+	- metrics_set: "pascal_voc_detection_metrics"
+	- num_examples: test klasöründe kaç imajımız var.
+
+* hemen altında eval_input_reader'da:
+	- input_path: "D:/uav/data/test.record"
+  	- label_map_path: "D:/uav/training/labelmap.pbtxt"
+
+~~ Yapılabilecek ayarlardan bahset.
+referans sayfası.
+batch size.
+data augmentation. ~~
+
+-----
+
+eğitimi başlatmak.
+
+* hala anaconda prompt'tayız; şuraya gidiyoruz. models\research\object_detection\legacy
+ve:
+python train.py --logtostderr --train_dir=D:/uav/training --pipeline_config_path=D:/uav/training/faster_rcnn_inception_v2_pets.config
+
+-----
+
+* eğitim devam ederken http://localhost:6006/ 'ta istatistikler grafikler falan görebiliyoruz.
+D:\uav klasöründeyken
+	tensorboard --logdir=training
+	sonra da localhost:6006'ya.
+
+* yine eğitim devam ederken bence 5 binde bir model.ckpt ile başlayan 3 dosyayı mysave'e yedeklemek lazım.
+çünkü bazen az eğitilen modeller daha iyi oluyor. ve TF sadece son 2-3 taneyi saklı tutup öncekileri silerek devam ediyor.
+
+-----
+
+bu ckpt'lerden faydalanarak:::::::
+* üzerine eğitim yapmaya devam edebiliyoruz.
+* çalışmaya hazır model çıkarabiliyoruz.
+
+^^^ çalışmaya hazır model çıkarmak için:
+
+# from models/research/object_detection
+
+python export_inference_graph.py --input_type image_tensor --pipeline_config_path D:\uav\training\faster_rcnn_inception_v2_pets.config --trained_checkpoint_prefix D:\uav\training\model.ckpt-91 --output_directory D:\uav\trained
+
+modeli çalıştırmak:
+test_model.py
+PATH_TO_CKPT ve PATH_TO_LABELS'ı girip, çalışmaya hazır.
+python test_model.py
+
+---------------------------------------------
+
+Tracking için faydalı: https://www.pyimagesearch.com/2018/07/30/opencv-object-tracking/
+
+(tutoriallar ve trackingleri kıyaslaması)
+
+---------------------------------------------
+
+</pre>
+
+</div>
+
+<div class="side"></div>
+</div>
+
+</body>
+</html>
