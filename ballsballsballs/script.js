@@ -14,9 +14,9 @@ var downHeld = false;
 var beep = new Audio('beep');
 beep.volume = 0.002
 
-var gravityOn = false;
+var gravityOn = true;
 var dragOn = true;
-var soundOn = true;
+var soundOn = false;
 
 var clearCanv = true;
 
@@ -215,7 +215,7 @@ function logger() {
 }
 
 // spawn the initial small thingies.
-for (i = 0; i<70; i++) {
+for (i = 0; i<90; i++) {
     objArray[objArray.length] = new Ball(randomX(), randomY(), randomRadius());
 }
 
@@ -223,7 +223,7 @@ bigBalls = true;
 
 // manually spawn the few large ones that
 // start with no velocity. because i'm lazy.
-for (i = 0; i<9; i++) {
+for (i = 0; i<5; i++) {
     var temp = new Ball(randomX(), randomY(), randomRadius());
     temp.dx = 0;
     temp.dy = 0;
