@@ -215,7 +215,7 @@ function logger() {
 }
 
 // spawn the initial small thingies.
-for (i = 0; i<160; i++) {
+for (i = 0; i<70; i++) {
     objArray[objArray.length] = new Ball(randomX(), randomY(), randomRadius());
 }
 
@@ -223,7 +223,7 @@ bigBalls = true;
 
 // manually spawn the few large ones that
 // start with no velocity. because i'm lazy.
-for (i = 0; i<7; i++) {
+for (i = 0; i<9; i++) {
     var temp = new Ball(randomX(), randomY(), randomRadius());
     temp.dx = 0;
     temp.dy = 0;
