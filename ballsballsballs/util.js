@@ -1,13 +1,21 @@
 function randomColor() {
-    red = Math.floor(Math.random() * 3) * 127;
-    green = Math.floor(Math.random() * 3) * 127;
-    blue = Math.floor(Math.random() * 3) * 127;
-    rc = "rgb(" + red + ", " + green + ", " + blue + ")";
+    let red = Math.floor(Math.random() * 3) * 127;
+    let green = Math.floor(Math.random() * 3) * 127;
+    let blue = Math.floor(Math.random() * 3) * 127;
+
+    // dim down the small balls
+    if (!bigBalls){
+        red *= 0.65
+        green *= 0.65
+        blue *= 0.65
+    }
+
+    let rc = "rgb(" + red + ", " + green + ", " + blue + ")";
     return rc;
 }
 
 function randomX() {
-    x = Math.floor(Math.random() * canvas.width);
+    let x = Math.floor(Math.random() * canvas.width);
     if (x < 30) {
         x = 30;
     } else if (x + 30 > canvas.width) {
@@ -17,7 +25,7 @@ function randomX() {
 }
 
 function randomY() {
-    y = Math.floor(Math.random() * canvas.height);
+    let y = Math.floor(Math.random() * canvas.height);
     if (y < 30) {
         y = 30;
     } else if (y + 30 > canvas.height) {
@@ -28,22 +36,22 @@ function randomY() {
 
 function randomRadius() {
     if (bigBalls) {
-        r = Math.ceil(Math.random() * 10 + 13);
+        let r = Math.ceil(Math.random() * 10 + 20);
         return r;
     } else {
-        r = Math.ceil(Math.random() * 2 + 1);
-        //r = 2;
+        let r = Math.ceil(Math.random() * 2 + 2);
+        //let r = 5;
         return r;
     }
 }
 
 function randomDx() {
-    r = Math.floor(Math.random() * 10 - 5);
+    let r = Math.floor(Math.random() * 10 - 4);
     return r;
 }
 
 function randomDy() {
-    r = Math.floor(Math.random() * 10 - 5);
+    let r = Math.floor(Math.random() * 10 - 3);
     return r;
 }
 

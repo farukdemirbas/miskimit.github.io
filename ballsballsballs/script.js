@@ -1,26 +1,28 @@
-var canvas = document.getElementById("myCanvas");
-var ctx = canvas.getContext("2d");
+let canvas = document.getElementById("myCanvas");
+let ctx = canvas.getContext("2d");
 
-var objArray = [];
-var paused = false;
-var totalKineticEnergy = 0;
-var bumped = false;
+let objArray = [];
+let paused = false;
+let bumped = false;
 
-var leftHeld = false;
-var upHeld = false;
-var rightHeld = false;
-var downHeld = false;
+let leftHeld = false;
+let upHeld = false;
+let rightHeld = false;
+let downHeld = false;
+let arrowControlSpeed = .25;
 
-var beep = new Audio('beep');
-beep.volume = 0.002
+let gravityOn = false;
 
-var gravityOn = true;
-var dragOn = true;
-var soundOn = false;
+let clearCanv = true;
 
-var clearCanv = true;
+let bigBalls = false;
 
-var bigBalls = false;
+let lastTime = (new Date()).getTime();
+let currentTime = 0;
+let dt = 0;
+
+let numStartingSmallBalls = 235;
+let numStartingBigBalls = 8;
 
 document.addEventListener("keydown", keyDownHandler);
 document.addEventListener("keyup", keyUpHandler);
@@ -36,9 +38,6 @@ function keyDownHandler(event) {
         paused = !paused;
     } else if (event.keyCode == 71) { // g
         gravityOn = !gravityOn;
-        dragOn = !dragOn;
-    } else if (event.keyCode == 77) { // m
-        soundOn = !soundOn;
     } else if (event.keyCode == 65) { // A
         leftHeld = true;
     } else if (event.keyCode == 87) { // W
@@ -70,20 +69,20 @@ function keyUpHandler(event) {
 
 function arrowControls() {
     if (leftHeld) { // left arrow
-        for (var obj in objArray) {
-            objArray[obj].dx -= 0.3;
+        for (let obj in objArray) {
+            objArray[obj].dx -= arrowControlSpeed / objArray[obj].radius;
         }
     } if (upHeld) { // up arrow
-        for (var obj in objArray) {
-            objArray[obj].dy -= 0.3;
+        for (let obj in objArray) {
+            objArray[obj].dy -= arrowControlSpeed / objArray[obj].radius;
         }
     } if (rightHeld) { // right arrow
-        for (var obj in objArray) {
-            objArray[obj].dx += 0.3;
+        for (let obj in objArray) {
+            objArray[obj].dx += arrowControlSpeed / objArray[obj].radius;
         }
     } if (downHeld) { // down arrow
-        for (var obj in objArray) {
-            objArray[obj].dy += 0.3;
+        for (let obj in objArray) {
+            objArray[obj].dy += arrowControlSpeed / objArray[obj].radius;
         }
     }
 }
@@ -116,122 +115,141 @@ function wallCollision(ball) {
 }
 
 function ballCollision() {
-    for (var obj1 in objArray) {
-        for (var obj2 in objArray) {
-            if (obj1 !== obj2 && distanceNextFrame(objArray[obj1], objArray[obj2]) <= 0) {
-                var theta1 = objArray[obj1].angle();
-                var theta2 = objArray[obj2].angle();
-                var phi = Math.atan2(objArray[obj2].y - objArray[obj1].y, objArray[obj2].x - objArray[obj1].x);
-                var m1 = objArray[obj1].mass;
-                var m2 = objArray[obj2].mass;
-                var v1 = objArray[obj1].speed();
-                var v2 = objArray[obj2].speed();
+    for (let i=0; i<objArray.length-1; i++) {
+        for (let j=i+1; j<objArray.length; j++) {
+            let ob1 = objArray[i]
+            let ob2 = objArray[j]
+            let dist = distance(ob1, ob2)
 
-                var dx1F = (v1 * Math.cos(theta1 - phi) * (m1-m2) + 2*m2*v2*Math.cos(theta2 - phi)) / (m1+m2) * Math.cos(phi) + v1*Math.sin(theta1-phi) * Math.cos(phi+Math.PI/2);
-                var dy1F = (v1 * Math.cos(theta1 - phi) * (m1-m2) + 2*m2*v2*Math.cos(theta2 - phi)) / (m1+m2) * Math.sin(phi) + v1*Math.sin(theta1-phi) * Math.sin(phi+Math.PI/2);
-                var dx2F = (v2 * Math.cos(theta2 - phi) * (m2-m1) + 2*m1*v1*Math.cos(theta1 - phi)) / (m1+m2) * Math.cos(phi) + v2*Math.sin(theta2-phi) * Math.cos(phi+Math.PI/2);
-                var dy2F = (v2 * Math.cos(theta2 - phi) * (m2-m1) + 2*m1*v1*Math.cos(theta1 - phi)) / (m1+m2) * Math.sin(phi) + v2*Math.sin(theta2-phi) * Math.sin(phi+Math.PI/2);
+            if (dist < ob1.radius + ob2.radius) {              
+                let theta1 = ob1.angle();
+                let theta2 = ob2.angle();
+                let phi = Math.atan2(ob2.y - ob1.y, ob2.x - ob1.x);
+                let m1 = ob1.mass;
+                let m2 = ob2.mass;
+                let v1 = ob1.speed();
+                let v2 = ob2.speed();
 
-                objArray[obj1].dx = dx1F;                
-                objArray[obj1].dy = dy1F;                
-                objArray[obj2].dx = dx2F;                
-                objArray[obj2].dy = dy2F;
+                let dx1F = (v1 * Math.cos(theta1 - phi) * (m1-m2) + 2*m2*v2*Math.cos(theta2 - phi)) / (m1+m2) * Math.cos(phi) + v1*Math.sin(theta1-phi) * Math.cos(phi+Math.PI/2);
+                let dy1F = (v1 * Math.cos(theta1 - phi) * (m1-m2) + 2*m2*v2*Math.cos(theta2 - phi)) / (m1+m2) * Math.sin(phi) + v1*Math.sin(theta1-phi) * Math.sin(phi+Math.PI/2);
+                let dx2F = (v2 * Math.cos(theta2 - phi) * (m2-m1) + 2*m1*v1*Math.cos(theta1 - phi)) / (m1+m2) * Math.cos(phi) + v2*Math.sin(theta2-phi) * Math.cos(phi+Math.PI/2);
+                let dy2F = (v2 * Math.cos(theta2 - phi) * (m2-m1) + 2*m1*v1*Math.cos(theta1 - phi)) / (m1+m2) * Math.sin(phi) + v2*Math.sin(theta2-phi) * Math.sin(phi+Math.PI/2);
+
+                ob1.dx = dx1F;                
+                ob1.dy = dy1F;                
+                ob2.dx = dx2F;                
+                ob2.dy = dy2F;
+          
+                staticCollision(ob1, ob2)
                 
-                if (soundOn)
-                    beep.play();
             }            
         }
-        wallCollision(objArray[obj1]);
+        wallCollision(objArray[i]);
     }
+
+    if (objArray.length > 0)
+        wallCollision(objArray[objArray.length-1])
 }
 
-function staticCollision() {
-    for (var obj1 in objArray) {
-        for (var obj2 in objArray) {
-            if (obj1 !== obj2 &&
-                distance(objArray[obj1], objArray[obj2]) < objArray[obj1].radius + objArray[obj2].radius)
-            {
-                var theta = Math.atan2((objArray[obj1].y - objArray[obj2].y), (objArray[obj1].x - objArray[obj2].x));
-                var overlap = objArray[obj1].radius + objArray[obj2].radius - distance (objArray[obj1], objArray[obj2]);
-                var smallerObject = objArray[obj1].radius < objArray[obj2].radius ? obj1 : obj2
-                objArray[smallerObject].x -= overlap * Math.cos(theta);
-                objArray[smallerObject].y -= overlap * Math.sin(theta);
-            }
-        }
+function staticCollision(ob1, ob2, emergency=false)
+{
+    let overlap = ob1.radius + ob2.radius - distance(ob1, ob2);
+    let smallerObject = ob1.radius < ob2.radius ? ob1 : ob2;
+    let biggerObject = ob1.radius > ob2.radius ? ob1 : ob2;
+
+    // When things go normally, this line does not execute.
+    // "Emergency" is when staticCollision has run, but the collision
+    // still hasn't been resolved. Which implies that one of the objects
+    // is likely being jammed against a corner, so we must now move the OTHER one instead.
+    // in other words: this line basically swaps the "little guy" role, because
+    // the actual little guy can't be moved away due to being blocked by the wall.
+    if (emergency) [smallerObject, biggerObject] = [biggerObject, smallerObject]
+    
+    let theta = Math.atan2((biggerObject.y - smallerObject.y), (biggerObject.x - smallerObject.x));
+    smallerObject.x -= overlap * Math.cos(theta);
+    smallerObject.y -= overlap * Math.sin(theta); 
+
+    if (distance(ob1, ob2) < ob1.radius + ob2.radius) {
+        // we don't want to be stuck in an infinite emergency.
+        // so if we have already run one emergency round; just ignore the problem.
+        if (!emergency) staticCollision(ob1, ob2, true)
     }
 }
 
 function applyGravity() {
-    for (var obj in objArray) {
-        if (objArray[obj].onGround() == false) {
-            objArray[obj].dy += 0.29;
-        }   
-    }
-}
+    for (let obj in objArray) {
+        let ob = objArray[obj]
+        if (ob.onGround() == false) {
+            ob.dy += .29;
+        }
 
-function applyDrag() {
-    for (var obj in objArray) {
-        objArray[obj].dx *= 0.99
-        objArray[obj].dy *= 0.99
+        // apply basic drag
+        ob.dx *= .99
+        ob.dy *= .975
     }
 }
 
 function moveObjects() {
-    for (var obj in objArray) {
-        objArray[obj].x += objArray[obj].dx;
-        objArray[obj].y += objArray[obj].dy;
+    for (let i=0; i<objArray.length; i++) {
+        let ob = objArray[i];
+        ob.x += ob.dx * dt;
+        ob.y += ob.dy * dt;
     }    
 }
 
 function drawObjects() {
-    for (var obj in objArray) {
+    for (let obj in objArray) {
         objArray[obj].draw();
     }
 }
 
 function draw() {
+    currentTime = (new Date()).getTime();
+    dt = (currentTime - lastTime) / 1000; // delta time in seconds
+    
+    // dirty and lazy solution
+    // instead of scaling up every velocity vector the program
+    // we increase the speed of time
+    dt *= 50;
 
-    if(clearCanv) clearCanvas();
+    if (clearCanv) clearCanvas();
     canvasBackground();
-
+    
     if (!paused) {
         arrowControls();
         if (gravityOn) {
-            applyGravity();
-            applyDrag();
+            applyGravity(); // (and drag)
         }
         moveObjects();
+        ballCollision();
     }
-
+    
     drawObjects();
-    staticCollision();
-    ballCollision();
+    
     //logger();
-    requestAnimationFrame(draw);
+    
+    lastTime = currentTime;
+    window.requestAnimationFrame(draw);
 }
 
 function logger() {
-    //log some stuff
+    // log stuff
 }
 
 // spawn the initial small thingies.
-for (i = 0; i<90; i++) {
+for (i = 0; i<numStartingSmallBalls; i++) {
     objArray[objArray.length] = new Ball(randomX(), randomY(), randomRadius());
 }
 
-bigBalls = true;
 
 // manually spawn the few large ones that
-// start with no velocity. because i'm lazy.
-for (i = 0; i<5; i++) {
-    var temp = new Ball(randomX(), randomY(), randomRadius());
-    temp.dx = 0;
-    temp.dy = 0;
+// start with no velocity. (lazy code)
+bigBalls = true;
+for (i = 0; i<numStartingBigBalls; i++) {
+    let temp = new Ball(randomX(), randomY(), randomRadius());
+    temp.dx = randomDx() / 8;
+    temp.dy = randomDy() / 12;
     objArray[objArray.length] = temp;
 }
-
-// and manually spawn one large ball WITH initial velocity.
-// just to impart some more initial energy in the system.
-objArray[objArray.length] = new Ball(randomX(), randomY(), 15);
 
 draw();
