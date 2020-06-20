@@ -37,12 +37,14 @@ function keyDownHandler(event) {
     } else if (event.keyCode == 80) { // p
         paused = !paused;
     } else if (event.keyCode == 71) { // g
-        // This feature is taken out
+        // This feature WAS taken out
         // because of a bug where
         // balls "merge" with each other
-        // when under a lot of pressure.        
+        // when under a lot of pressure.      
         
-        // gravityOn = !gravityOn;
+        // putting back in
+        
+        gravityOn = !gravityOn;
     } else if (event.keyCode == 65) { // A
         leftHeld = true;
     } else if (event.keyCode == 87) { // W
